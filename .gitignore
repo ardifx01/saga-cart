@@ -1,0 +1,23 @@
+# Front-End
+front_end/node_modules/
+front_end/.env
+
+# Gateway Service
+gateway/tmp/
+gateway/logs/
+gateway/.env
+
+# Order Service
+order_service/tmp/
+order_service/logs/
+order_service/.env
+
+# Product Service
+product_service/tmp/
+product_service/logs/
+product_service/.env
+
+# General
+*.log
+*.DS_Store
+*.env
