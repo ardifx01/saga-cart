@@ -1,6 +1,6 @@
-# GoStore
+# go_store
 
-GoStore is a full-stack e-commerce application designed to provide a seamless shopping experience. Built with modern technologies, it features a robust backend implementing the SAGA pattern, specifically using choreography for effective distributed transaction management. The application is scalable, maintainable, and optimized for performance, making it an excellent choice for both developers and users.
+go_store is a full-stack e-commerce application designed to provide a seamless shopping experience. Built with modern technologies, it features a robust backend implementing the SAGA pattern, specifically using choreography for effective distributed transaction management. The application is scalable, maintainable, and optimized for performance, making it an excellent choice for both developers and users.
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@ GoStore is a full-stack e-commerce application designed to provide a seamless sh
 
 ![Architecture Diagram](https://github.com/pepega90/GoStore/blob/main/gostore_saga.png)
 
-GoStore follows a microservices architecture, ensuring scalability and maintainability. The backend is built using Go with the Gin framework, handling RESTful APIs and business logic. GORM is utilized for ORM with PostgreSQL as the primary database. Kafka is integrated for handling asynchronous communication between services, implementing the SAGA pattern with choreography to manage distributed transactions effectively.
+go_store follows a microservices architecture, ensuring scalability and maintainability. The backend is built using Go with the Gin framework, handling RESTful APIs and business logic. GORM is utilized for ORM with PostgreSQL as the primary database. Kafka is integrated for handling asynchronous communication between services, implementing the SAGA pattern with choreography to manage distributed transactions effectively.
 
 The frontend is developed with React.js, styled using Tailwind CSS for a modern and responsive user interface. Docker is used for containerizing the application, simplifying deployment and ensuring consistency across different environments.
 
