@@ -6,7 +6,7 @@ const Wrapper = ({ children }) => {
     <div className="flex h-screen">
       {/* Sidebar */}
       <div className="w-64 bg-gray-900 p-5">
-        <h2 className="text-white text-xl font-bold mb-10">GoStore</h2>
+        <h2 className="text-white text-xl font-bold mb-10">Saga Cart</h2>
         <ul className="space-y-4">
           <li>
             <Link
