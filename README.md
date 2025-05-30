@@ -1,6 +1,6 @@
-# go_store
+# saga-cart
 
-go_store is a full-stack e-commerce application designed to provide a seamless shopping experience. Built with modern technologies, it features a robust backend implementing the SAGA pattern, specifically using choreography for effective distributed transaction management. The application is scalable, maintainable, and optimized for performance, making it an excellent choice for both developers and users.
+saga-cart is a full-stack e-commerce application designed to provide a seamless shopping experience. Built with modern technologies, it features a robust backend implementing the SAGA pattern, specifically using choreography for effective distributed transaction management. The application is scalable, maintainable, and optimized for performance, making it an excellent choice for both developers and users.
 
 ## Table of Contents
 
