@@ -14,7 +14,7 @@ saga-cart is a full-stack e-commerce application designed to provide a seamless 
 
 ![Architecture Diagram](https://github.com/pepega90/GoStore/blob/main/gostore_saga.png)
 
-go_store follows a microservices architecture, ensuring scalability and maintainability. The backend is built using Go with the Gin framework, handling RESTful APIs and business logic. GORM is utilized for ORM with PostgreSQL as the primary database. Kafka is integrated for handling asynchronous communication between services, implementing the SAGA pattern with choreography to manage distributed transactions effectively.
+saga-cart follows a microservices architecture, ensuring scalability and maintainability. The backend is built using Go with the Gin framework, handling RESTful APIs and business logic. GORM is utilized for ORM with PostgreSQL as the primary database. Kafka is integrated for handling asynchronous communication between services, implementing the SAGA pattern with choreography to manage distributed transactions effectively.
 
 The frontend is developed with React.js, styled using Tailwind CSS for a modern and responsive user interface. Docker is used for containerizing the application, simplifying deployment and ensuring consistency across different environments.
 
