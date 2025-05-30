@@ -33,8 +33,11 @@ func main() {
 	}
 
 	// setup kafka
-	kafkaReader := pkg.ConnectKafkaReader("order-created")
-	productConsumer := kafka.NewProductConsumer(kafkaReader, db)
+	kafkaWriter := pkg.ConnectKafkaWriter()
+	kafkaReader := pkg.ConnectKafkaReader("stock-reserved", "stock-failed")
+
+	productPublisher := kafka.NewProductPublisher(kafkaWriter)
+	productConsumer := kafka.NewProductConsumer(kafkaReader, productPublisher, db)
 	go productConsumer.Consume()
 	// setup kafka
 

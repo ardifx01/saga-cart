@@ -36,3 +36,26 @@ func (o *OrderRepo) CreateOrder(order domain.Order) (*domain.Order, error) {
 	}
 	return &order, nil
 }
+
+func (o *OrderRepo) UpdateOrderStatus(orderID int, status bool) error {
+	var orderFind domain.Order
+	result := o.db.First(&orderFind, orderID)
+	if result.Error != nil {
+		log.Printf("error while finding order to update status: %v", result.Error)
+		return result.Error
+	}
+
+	if !status {
+		orderFind.Status = "Berhasil"
+	} else {
+		orderFind.Status = "Gagal"
+	}
+
+	result = o.db.Save(&orderFind)
+	if result.Error != nil {
+		log.Printf("error while updating status order: %v", result.Error)
+		return result.Error
+	}
+
+	return nil
+}

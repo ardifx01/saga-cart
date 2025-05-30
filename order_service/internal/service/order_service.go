@@ -38,7 +38,7 @@ func (s *OrderService) CreateOrder(order domain.Order) (*domain.Order, error) {
 
 	message_byte, _ := json.Marshal(order_created)
 
-	go s.publisher.Publish("order-created", message_byte)
+	go s.publisher.Publish("stock-reserved", message_byte)
 
 	return order_created, nil
 }

@@ -16,10 +16,10 @@ type OrderHandler struct {
 }
 
 type OrderRequest struct {
-	CustomerName string `json:"customer_name"`
-	ProductID    int    `json:"product_id"`
-	Qty          int    `json:"qty"`
-	Status       string `json:"status"`
+	CustomerName string  `json:"customer_name"`
+	ProductID    int     `json:"product_id"`
+	Qty          int     `json:"qty"`
+	Amount       float64 `json:"amount"`
 }
 
 func NewOrderHandler(orderService contracts.OrderServiceContract) *OrderHandler {
@@ -53,7 +53,8 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 		CustomerName: req.CustomerName,
 		ProductID:    req.ProductID,
 		Qty:          req.Qty,
-		Status:       req.Status,
+		Amount:       req.Amount,
+		Status:       "Pending",
 		OrderDate:    time.Now(),
 	}
 

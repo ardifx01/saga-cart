@@ -7,17 +7,17 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-type ProductPublisher struct {
+type PaymentPublisher struct {
 	writer *kafka.Writer
 }
 
-func NewProductPublisher(writer *kafka.Writer) *ProductPublisher {
-	return &ProductPublisher{
+func NewPaymentPublisher(writer *kafka.Writer) *PaymentPublisher {
+	return &PaymentPublisher{
 		writer: writer,
 	}
 }
 
-func (p *ProductPublisher) Publish(topic string, message []byte) error {
+func (p *PaymentPublisher) Publish(topic string, message []byte) error {
 	err := p.writer.WriteMessages(context.Background(), kafka.Message{
 		Topic: topic,
 		Value: message,
@@ -30,6 +30,6 @@ func (p *ProductPublisher) Publish(topic string, message []byte) error {
 	return nil
 }
 
-func (p *ProductPublisher) Close() error {
+func (p *PaymentPublisher) Close() error {
 	return p.writer.Close()
 }

@@ -19,9 +19,9 @@ func main() {
 
 	// CORS
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"}, 
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}, 
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"}, 
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
@@ -32,13 +32,17 @@ func main() {
 		log.Fatalf("error create connection to db: %v", err.Error())
 	}
 
+	orderRepo := repository.NewOrderRepo(db)
+
 	// setup kafka
 	kafkaWriter := pkg.ConnectKafkaWriter()
+	kafkaConsumer := pkg.ConnectKafkaReader("order-failed", "order-succes")
 	defer kafkaWriter.Close()
 	orderPublisher := kafka.NewOrderPublisher(kafkaWriter)
+	orderConsumer := kafka.NewOrderConsumer(kafkaConsumer, orderRepo)
+	go orderConsumer.Consume()
 	// setup kafka
 
-	orderRepo := repository.NewOrderRepo(db)
 	orderService := service.NewOrderService(orderRepo, orderPublisher)
 	orderHandler := handler.NewOrderHandler(orderService)
 

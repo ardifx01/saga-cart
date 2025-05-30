@@ -10,6 +10,7 @@ function Cart() {
   const [product, setProduct] = useState({ name: "" });
   const [customerName, setCustomerName] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [money, setMoney] = useState("");
   const [alert, setAlert] = useState("");
 
   useEffect(() => {
@@ -19,18 +20,32 @@ function Cart() {
     })();
   }, [productId]);
 
+  const formatWithCommas = (numberString) => {
+    const cleaned = numberString.replace(/[^\d]/g, "");
+    return cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const handleMoneyChange = (e) => {
+    const formatted = formatWithCommas(e.target.value);
+    setMoney(formatted);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const availableMoney = parseInt(money.replace(/,/g, ""), 10) || 0;
+
     try {
       await axios.post("/api/orders/", {
         customer_name: customerName,
         product_id: productId,
         qty: +quantity,
-        status: "Pending",
+        amount: availableMoney, // send raw money to backend if needed
       });
       setAlert("Product successfully added to the cart!");
       setCustomerName("");
       setQuantity("");
+      setMoney("");
     } catch (error) {
       setAlert("Failed to add product to the cart. Please try again.");
     }
@@ -109,6 +124,25 @@ function Cart() {
               onChange={(e) => setQuantity(e.target.value)}
               className="w-full p-2 border-2 border-black rounded-lg shadow-md text-gray-800 focus:ring-2 focus:ring-black"
               min="1"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="money"
+              className="block text-lg font-bold text-gray-800"
+            >
+              Enter Your Money (IDR)
+            </label>
+            <input
+              id="money"
+              type="text"
+              placeholder="e.g., 10,000"
+              value={money}
+              onChange={handleMoneyChange}
+              inputMode="numeric"
+              className="w-full p-2 border-2 border-black rounded-lg shadow-md text-gray-800 focus:ring-2 focus:ring-black"
               required
             />
           </div>

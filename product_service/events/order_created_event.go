@@ -1,6 +1,8 @@
 package events
 
 type OrderCreatedEvent struct {
-	ProductID int `json:"product_id"`
-	Qty       int `json:"qty"`
+	ID        int     `json:"id"`
+	ProductID int     `json:"product_id"`
+	Amount    float64 `json:"amount"`
+	Qty       int     `json:"qty"`
 }
