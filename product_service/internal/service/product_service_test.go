@@ -3,8 +3,8 @@ package service_test
 import (
 	"errors"
 	"product_service_saga/internal/domain"
+	mock_contracts "product_service_saga/internal/mocks/contracts"
 	"product_service_saga/internal/service"
-	mock_contracts "product_service_saga/mocks/contracts"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

@@ -7,11 +7,16 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-type PaymentPublisher struct {
-	writer *kafka.Writer
+type IKafkaWriter interface {
+	WriteMessages(ctx context.Context, msgs ...kafka.Message) error
+	Close() error
 }
 
-func NewPaymentPublisher(writer *kafka.Writer) *PaymentPublisher {
+type PaymentPublisher struct {
+	writer IKafkaWriter
+}
+
+func NewPaymentPublisher(writer IKafkaWriter) *PaymentPublisher {
 	return &PaymentPublisher{
 		writer: writer,
 	}

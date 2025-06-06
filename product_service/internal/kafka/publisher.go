@@ -7,11 +7,16 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-type ProductPublisher struct {
-	writer *kafka.Writer
+type IKafka interface {
+	WriteMessages(ctx context.Context, msgs ...kafka.Message) error
+	Close() error
 }
 
-func NewProductPublisher(writer *kafka.Writer) *ProductPublisher {
+type ProductPublisher struct {
+	writer IKafka
+}
+
+func NewProductPublisher(writer IKafka) *ProductPublisher {
 	return &ProductPublisher{
 		writer: writer,
 	}

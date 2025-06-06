@@ -24,7 +24,7 @@ func main() {
 	// CORS
 
 	// Postgre
-	db, err := db.ConnectPostgre()
+	_, err := db.ConnectPostgre()
 	if err != nil {
 		log.Fatalf("error create connection to db (payment-service): %v", err.Error())
 	}
@@ -34,7 +34,7 @@ func main() {
 	kafkaWriter := pkg.ConnectKafkaWriter()
 	kafkaReader := pkg.ConnectKafkaReader("payment-request")
 	paymentPublisher := kafka.NewPaymentPublisher(kafkaWriter)
-	paymentConsumer := kafka.NewPaymentConsumer(kafkaReader, paymentPublisher, db)
+	paymentConsumer := kafka.NewPaymentConsumer(kafkaReader, paymentPublisher)
 	go paymentConsumer.Consume()
 	// setup kafka
 

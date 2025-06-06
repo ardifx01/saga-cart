@@ -7,11 +7,16 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-type OrderPublisher struct {
-	writer *kafka.Writer
+type IKafkaWriter interface {
+	WriteMessages(ctx context.Context, msgs ...kafka.Message) error
+	Close() error
 }
 
-func NewOrderPublisher(writer *kafka.Writer) *OrderPublisher {
+type OrderPublisher struct {
+	writer IKafkaWriter
+}
+
+func NewOrderPublisher(writer IKafkaWriter) *OrderPublisher {
 	return &OrderPublisher{
 		writer: writer,
 	}

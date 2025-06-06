@@ -5,15 +5,18 @@ import (
 	"log"
 	"order_service_saga/internal/contracts"
 	"order_service_saga/internal/domain"
-	"order_service_saga/internal/kafka"
 )
+
+type IOrderPublisher interface {
+	Publish(topic string, message []byte) error
+}
 
 type OrderService struct {
 	orderRepo contracts.OrderRepoContract
-	publisher *kafka.OrderPublisher
+	publisher IOrderPublisher
 }
 
-func NewOrderService(orderRepo contracts.OrderRepoContract, publisher *kafka.OrderPublisher) contracts.OrderServiceContract {
+func NewOrderService(orderRepo contracts.OrderRepoContract, publisher IOrderPublisher) contracts.OrderServiceContract {
 	return &OrderService{
 		orderRepo: orderRepo,
 		publisher: publisher,

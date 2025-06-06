@@ -7,20 +7,26 @@ import (
 	"payment_service_saga/events"
 
 	"github.com/segmentio/kafka-go"
-	"gorm.io/gorm"
 )
 
-type PaymentConsumer struct {
-	reader    *kafka.Reader
-	publisher *PaymentPublisher
-	db        *gorm.DB
+type IKafkaConsumer interface {
+	ReadMessage(ctx context.Context) (kafka.Message, error)
+	Close() error
 }
 
-func NewPaymentConsumer(reader *kafka.Reader, publisher *PaymentPublisher, db *gorm.DB) *PaymentConsumer {
+type IPaymentPublisher interface {
+	Publish(topic string, message []byte) error
+}
+
+type PaymentConsumer struct {
+	reader    IKafkaConsumer
+	publisher IPaymentPublisher
+}
+
+func NewPaymentConsumer(reader IKafkaConsumer, publisher IPaymentPublisher) *PaymentConsumer {
 	return &PaymentConsumer{
 		reader:    reader,
 		publisher: publisher,
-		db:        db,
 	}
 }
 

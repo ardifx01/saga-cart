@@ -8,11 +8,16 @@ import (
 	"gorm.io/gorm"
 )
 
-type ProductRepo struct {
-	db *gorm.DB
+type IGorm interface {
+	Find(dest interface{}, conds ...interface{}) (tx *gorm.DB)
+	First(dest interface{}, conds ...interface{}) (tx *gorm.DB)
 }
 
-func NewProductRepo(db *gorm.DB) contracts.ProductRepoContract {
+type ProductRepo struct {
+	db IGorm
+}
+
+func NewProductRepo(db IGorm) contracts.ProductRepoContract {
 	return &ProductRepo{
 		db: db,
 	}
@@ -30,7 +35,7 @@ func (p *ProductRepo) GetProducts() ([]*domain.Product, error) {
 
 func (p *ProductRepo) FindByID(id int) (*domain.Product, error) {
 	var product *domain.Product
-	err := p.db.Where("id = ?", id).First(&product).Error
+	err := p.db.First(&product, id).Error
 	if err != nil {
 		log.Printf("error get product by id: %v", err.Error())
 		return nil, err

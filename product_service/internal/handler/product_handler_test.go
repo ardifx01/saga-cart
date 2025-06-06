@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"product_service_saga/internal/domain"
 	"product_service_saga/internal/handler"
-	mock_contracts "product_service_saga/mocks/contracts"
+	mock_contracts "product_service_saga/internal/mocks/contracts"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -55,5 +55,5 @@ func TestGetAll(t *testing.T) {
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 		assert.Contains(t, w.Body.String(), "error get products")
 	})
-	
+
 }
