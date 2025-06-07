@@ -57,6 +57,9 @@ function Cart() {
     <Wrapper>
       <div className="p-8">
         <h1 className="text-3xl font-extrabold text-gray-800 mb-6">Cart</h1>
+        <p className="text-1xl mb-4">
+          {product.description}
+        </p>
 
         {alert && (
           <div

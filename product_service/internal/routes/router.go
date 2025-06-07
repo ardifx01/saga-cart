@@ -12,6 +12,7 @@ func RouteConfig(router *gin.Engine, productHandler *handler.ProductHandler) {
 	{
 		productGroup.GET("/", productHandler.GetAll)
 		productGroup.GET("/:id", productHandler.GetProduct)
+		productGroup.GET("/search", productHandler.SearchProducts)
 		productGroup.GET("/test", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
 				"message": "hello world",

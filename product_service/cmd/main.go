@@ -10,6 +10,7 @@ import (
 	"product_service_saga/internal/service"
 	"product_service_saga/pkg"
 
+	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -41,9 +42,19 @@ func main() {
 	go productConsumer.Consume()
 	// setup kafka
 
+	// setup elasticsearch
+	esClient, err := elasticsearch.NewTypedClient(elasticsearch.Config{
+		Addresses: []string{"http://localhost:9200"},
+	})
+	if err != nil {
+		log.Fatalf("Error create elasticserach client: %s\n", err)
+	}
+	// setup elasticsearch
+
 	productRepo := repository.NewProductRepo(db)
 	productService := service.NewProductService(productRepo)
-	productHandler := handler.NewProductHandler(productService)
+	productHandler := handler.NewProductHandler(productService, esClient)
+	productHandler.IndexAllProducts()
 
 	routes.RouteConfig(r, productHandler)
 
