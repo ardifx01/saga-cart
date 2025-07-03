@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"order_service_saga/internal/cache"
 	"order_service_saga/internal/db"
 	"order_service_saga/internal/handler"
 	"order_service_saga/internal/kafka"
@@ -32,7 +33,8 @@ func main() {
 		log.Fatalf("error create connection to db: %v", err.Error())
 	}
 
-	orderRepo := repository.NewOrderRepo(db)
+	orderCache := cache.NewRedis()
+	orderRepo := repository.NewOrderRepo(db, orderCache)
 
 	// setup kafka
 	kafkaWriter := pkg.ConnectKafkaWriter()

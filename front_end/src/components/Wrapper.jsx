@@ -16,9 +16,6 @@ const Wrapper = ({ children }) => {
               Products
             </Link>
           </li>
-          {/* <li>
-            <Link to="/cart" className="text-white font-bold hover:text-gray-400">Cart</Link>
-          </li> */}
           <li>
             <Link
               to="/orders"
@@ -31,7 +28,21 @@ const Wrapper = ({ children }) => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-10">{children}</div>
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <div className="flex justify-between items-center px-10 py-4 border-b bg-gray-800">
+          <h1 className="text-white text-xl font-bold">Saga Cart</h1>
+          <Link
+            to="/login"
+            className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+          >
+            Login
+          </Link>
+        </div>
+
+        {/* Content Area */}
+        <div className="flex-1 p-10 bg-gray-100 overflow-auto">{children}</div>
+      </div>
     </div>
   );
 };

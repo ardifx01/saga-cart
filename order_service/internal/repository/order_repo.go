@@ -1,7 +1,10 @@
 package repository
 
 import (
+	"context"
+	"encoding/json"
 	"log"
+	"order_service_saga/internal/cache"
 	"order_service_saga/internal/contracts"
 	"order_service_saga/internal/domain"
 
@@ -9,22 +12,37 @@ import (
 )
 
 type OrderRepo struct {
-	db *gorm.DB
+	db    *gorm.DB
+	cache *cache.Redis
 }
 
-func NewOrderRepo(db *gorm.DB) contracts.OrderRepoContract {
+func NewOrderRepo(db *gorm.DB, cache *cache.Redis) contracts.OrderRepoContract {
 	return &OrderRepo{
-		db: db,
+		db:    db,
+		cache: cache,
 	}
 }
 
 func (o *OrderRepo) GerOrders() (*[]domain.Order, error) {
 	var orderList []domain.Order
-	err := o.db.Find(&orderList).Error
+	ctx := context.Background()
+
+	val, err := o.cache.Get(ctx, "order-list")
+	if err == nil {
+		json.Unmarshal([]byte(val), &orderList)
+		return &orderList, nil
+	}
+
+	err = o.db.Find(&orderList).Error
 	if err != nil {
 		log.Printf("error get all orders: %v", err.Error())
 		return nil, err
 	}
+
+	orderData, _ := json.Marshal(orderList)
+
+	_ = o.cache.Set(ctx, "order-list", orderData, 1)
+
 	return &orderList, nil
 }
 

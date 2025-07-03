@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"product_service_saga/internal/cache"
 	"product_service_saga/internal/db"
 	"product_service_saga/internal/handler"
 	"product_service_saga/internal/kafka"
@@ -51,7 +52,8 @@ func main() {
 	}
 	// setup elasticsearch
 
-	productRepo := repository.NewProductRepo(db)
+	productCache := cache.NewRedis()
+	productRepo := repository.NewProductRepo(db, productCache)
 	productService := service.NewProductService(productRepo)
 	productHandler := handler.NewProductHandler(productService, esClient)
 	productHandler.IndexAllProducts()

@@ -15,7 +15,7 @@ import (
 func TestProudctRepo_GetProducts(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mockGorm := mock_repository.NewMockIGorm(ctrl)
-	productRepo := repository.NewProductRepo(mockGorm)
+	productRepo := repository.NewProductRepo(mockGorm, nil)
 
 	t.Run("Sucess get all products", func(t *testing.T) {
 		products := []*domain.Product{
@@ -49,7 +49,7 @@ func TestProudctRepo_GetProducts(t *testing.T) {
 func TestProudctRepo_FindByID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mockGorm := mock_repository.NewMockIGorm(ctrl)
-	productRepo := repository.NewProductRepo(mockGorm)
+	productRepo := repository.NewProductRepo(mockGorm, nil)
 
 	t.Run("Success get product by id", func(t *testing.T) {
 		product := &domain.Product{ID: 1, Name: "Test Product"}
