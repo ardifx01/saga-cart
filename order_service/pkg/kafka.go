@@ -14,7 +14,6 @@ func ConnectKafkaReader(topics ...string) *kafka.Reader {
 		GroupID:     "order-service",
 		GroupTopics: topics,
 		Brokers:     []string{"localhost:9092"},
-		Partition:   0,
 		MinBytes:    10e3,
 		MaxBytes:    10e6,
 	})

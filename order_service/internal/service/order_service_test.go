@@ -5,6 +5,7 @@ import (
 	"order_service_saga/internal/domain"
 	mock_contracts "order_service_saga/internal/mocks/contracts"
 	mock_service "order_service_saga/internal/mocks/order"
+	mock_cache "order_service_saga/internal/mocks/redis"
 	"order_service_saga/internal/service"
 	"testing"
 
@@ -16,7 +17,8 @@ func TestGetOrders(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mockRepo := mock_contracts.NewMockOrderRepoContract(ctrl)
 	mockPublisher := mock_service.NewMockIOrderPublisher(ctrl)
-	orderService := service.NewOrderService(mockRepo, mockPublisher)
+	mockCache := mock_cache.NewMockICache(ctrl)
+	orderService := service.NewOrderService(mockRepo, mockPublisher, mockCache)
 
 	t.Run("Sucess get orders", func(t *testing.T) {
 		orders := []domain.Order{
@@ -44,7 +46,8 @@ func TestCreateOrder(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mockRepo := mock_contracts.NewMockOrderRepoContract(ctrl)
 	mockPublisher := mock_service.NewMockIOrderPublisher(ctrl)
-	orderService := service.NewOrderService(mockRepo, mockPublisher)
+	mockCache := mock_cache.NewMockICache(ctrl)
+	orderService := service.NewOrderService(mockRepo, mockPublisher, mockCache)
 
 	t.Run("Success create order", func(t *testing.T) {
 		newOrder := domain.Order{
@@ -52,6 +55,7 @@ func TestCreateOrder(t *testing.T) {
 		}
 
 		mockRepo.EXPECT().CreateOrder(gomock.Any()).Return(&newOrder, nil)
+		mockCache.EXPECT().Delete(gomock.Any(), "order-list")
 		mockPublisher.EXPECT().Publish("stock-reserved", gomock.Any()).Return(nil)
 
 		res, err := orderService.CreateOrder(newOrder)

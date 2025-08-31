@@ -45,7 +45,7 @@ func main() {
 	go orderConsumer.Consume()
 	// setup kafka
 
-	orderService := service.NewOrderService(orderRepo, orderPublisher)
+	orderService := service.NewOrderService(orderRepo, orderPublisher, orderCache)
 	orderHandler := handler.NewOrderHandler(orderService)
 
 	routes.RouteConfig(r, orderHandler)

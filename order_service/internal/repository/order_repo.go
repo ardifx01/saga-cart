@@ -30,6 +30,7 @@ func (o *OrderRepo) GerOrders() (*[]domain.Order, error) {
 	val, err := o.cache.Get(ctx, "order-list")
 	if err == nil {
 		json.Unmarshal([]byte(val), &orderList)
+		log.Println("[NGAMBIL DARI CACHE]")
 		return &orderList, nil
 	}
 
@@ -41,7 +42,7 @@ func (o *OrderRepo) GerOrders() (*[]domain.Order, error) {
 
 	orderData, _ := json.Marshal(orderList)
 
-	_ = o.cache.Set(ctx, "order-list", orderData, 1)
+	_ = o.cache.Set(ctx, "order-list", orderData, 500)
 
 	return &orderList, nil
 }
@@ -56,6 +57,12 @@ func (o *OrderRepo) CreateOrder(order domain.Order) (*domain.Order, error) {
 }
 
 func (o *OrderRepo) UpdateOrderStatus(orderID int, status bool) error {
+	// we do invalidate cache, to make sure when we get the orders list updated status from db not from cache
+	err := o.cache.Delete(context.Background(), "order-list")
+	if err != nil {
+		log.Println("Error deleting cache for update order status:", err)
+	}
+
 	var orderFind domain.Order
 	result := o.db.First(&orderFind, orderID)
 	if result.Error != nil {

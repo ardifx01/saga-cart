@@ -8,7 +8,7 @@ import (
 )
 
 func RouteConfig(router *gin.Engine, orderHandler *handler.OrderHandler) {
-	orderGroup := router.Group("/api/orders")
+	orderGroup := router.Group("/")
 	{
 		orderGroup.GET("/", orderHandler.GetAllOrders)
 		orderGroup.POST("/", orderHandler.CreateOrder)

@@ -1,4 +1,4 @@
-.PHONY: all gateway order_service product_service payment_service
+.PHONY: all gateway order_service product_service auth_service
 
 all:
 	@trap 'kill 0' SIGINT; \
@@ -6,6 +6,7 @@ all:
 	make order_service & \
 	make product_service & \
 	make payment_service & \
+	make auth_service & \
 	wait
 
 gateway:
@@ -19,3 +20,6 @@ product_service:
 
 payment_service:
 	@cd payment_service/cmd && go run main.go
+
+auth_service:
+	@cd auth_service/cmd && go run main.go

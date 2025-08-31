@@ -8,7 +8,7 @@ import (
 )
 
 func RouteConfig(router *gin.Engine, productHandler *handler.ProductHandler) {
-	productGroup := router.Group("/api/products")
+	productGroup := router.Group("/")
 	{
 		productGroup.GET("/", productHandler.GetAll)
 		productGroup.GET("/:id", productHandler.GetProduct)

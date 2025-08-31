@@ -1,8 +1,10 @@
 package service
 
 import (
+	"context"
 	"encoding/json"
 	"log"
+	"order_service_saga/internal/cache"
 	"order_service_saga/internal/contracts"
 	"order_service_saga/internal/domain"
 )
@@ -14,12 +16,14 @@ type IOrderPublisher interface {
 type OrderService struct {
 	orderRepo contracts.OrderRepoContract
 	publisher IOrderPublisher
+	cache     cache.ICache
 }
 
-func NewOrderService(orderRepo contracts.OrderRepoContract, publisher IOrderPublisher) contracts.OrderServiceContract {
+func NewOrderService(orderRepo contracts.OrderRepoContract, publisher IOrderPublisher, cache cache.ICache) contracts.OrderServiceContract {
 	return &OrderService{
 		orderRepo: orderRepo,
 		publisher: publisher,
+		cache:     cache,
 	}
 }
 
@@ -40,6 +44,7 @@ func (s *OrderService) CreateOrder(order domain.Order) (*domain.Order, error) {
 	}
 
 	message_byte, _ := json.Marshal(order_created)
+	s.cache.Delete(context.Background(), "order-list")
 
 	go s.publisher.Publish("stock-reserved", message_byte)
 

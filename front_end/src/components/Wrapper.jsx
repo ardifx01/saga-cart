@@ -1,7 +1,31 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Wrapper = ({ children }) => {
+  const navigate = useNavigate();
+  const [currentLoginUser, setCurrentLoginUser] = useState(null);
+
+  const HandleLogout = () => {
+    const token = localStorage.getItem("token");
+    if (token) localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = localStorage.getItem("token");
+        let {data} = await axios.get("/api/auth/me",{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setCurrentLoginUser(data);
+      } catch (error) {}
+    })();
+  }, []);
+ 
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -24,6 +48,7 @@ const Wrapper = ({ children }) => {
               Orders
             </Link>
           </li>
+          {/* {currentLoginUser.name} */}
         </ul>
       </div>
 
@@ -32,12 +57,21 @@ const Wrapper = ({ children }) => {
         {/* Header */}
         <div className="flex justify-between items-center px-10 py-4 border-b bg-gray-800">
           <h1 className="text-white text-xl font-bold">Saga Cart</h1>
-          <Link
+          {currentLoginUser ? (
+            <div className="flex">
+              <span className="text-white mr-5">{currentLoginUser.username}</span>
+               <button onClick={HandleLogout} className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
+            Logout
+          </button>
+            </div>
+          ): (
+            <Link
             to="/login"
             className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
           >
             Login
           </Link>
+          )}
         </div>
 
         {/* Content Area */}
