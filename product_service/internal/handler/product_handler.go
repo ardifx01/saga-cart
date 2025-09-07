@@ -28,15 +28,25 @@ func NewProductHandler(productService contracts.ProductServiceContract, esClient
 }
 
 func (h *ProductHandler) GetAll(c *gin.Context) {
-	list_products, err := h.productService.GetProducts()
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("page_size", "1"))
+
+	list_products, total, err := h.productService.GetProductsPaginate(page, pageSize)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"data":    nil,
 			"message": fmt.Sprintf("error get products (handler): %v", err.Error()),
 		})
 	}
+
+	total_page := (total + int64(pageSize) - 1) / int64(pageSize)
+
 	c.JSON(http.StatusOK, gin.H{
-		"data": list_products,
+		"data":       list_products,
+		"page":       page,
+		"page_size":  pageSize,
+		"total":      total,
+		"total_page": total_page,
 	})
 }
 

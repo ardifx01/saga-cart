@@ -9,8 +9,39 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
+
+func TestProductRepo_GetProductsPaginate(t *testing.T) {
+	t.Run("Success get all product paginate", func(t *testing.T) {
+		// Use in-memory SQLite DB
+		db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
+		assert.NoError(t, err)
+
+		// migrate schema
+		err = db.AutoMigrate(&domain.Product{})
+		assert.NoError(t, err)
+
+		// seed data
+		db.Create(&domain.Product{ID: 1, Name: "Product 1"})
+		db.Create(&domain.Product{ID: 2, Name: "Product 2"})
+		db.Create(&domain.Product{ID: 3, Name: "Product 3"})
+
+		// create repo
+		repo := repository.NewProductRepo(db, nil)
+
+		// act
+		products, total, err := repo.GetProductsPaginate(2, 0)
+
+		// assert
+		assert.NoError(t, err)
+		assert.Equal(t, int64(3), total)
+		assert.Len(t, products, 2)
+		assert.Equal(t, "Product 1", products[0].Name)
+		assert.Equal(t, "Product 2", products[1].Name)
+	})
+}
 
 func TestProudctRepo_GetProducts(t *testing.T) {
 	ctrl := gomock.NewController(t)

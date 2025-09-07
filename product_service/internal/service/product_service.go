@@ -25,6 +25,16 @@ func (s *ProductService) GetProducts() ([]*domain.Product, error) {
 	return listProducts, nil
 }
 
+func (s *ProductService) GetProductsPaginate(page, pageSize int) ([]*domain.Product, int64, error) {
+	offset := (page - 1) * pageSize
+	productsPaginate, total, err := s.productRepo.GetProductsPaginate(pageSize, offset)
+	if err != nil {
+		log.Printf("error get product paginate: %v\n", err.Error())
+		return nil, 0, err
+	}
+	return productsPaginate, total, nil
+}
+
 func (s *ProductService) FindByID(id int) (*domain.Product, error) {
 	product, err := s.productRepo.FindByID(id)
 	if err != nil {
